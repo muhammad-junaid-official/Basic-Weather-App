@@ -354,7 +354,8 @@ class handler(BaseHTTPRequestHandler):
         self.end_headers()
 
         try:
-            if path.endswith("/locate"):
+            # Locate endpoint: /api/weather?locate=1
+            if "locate" in params or path.endswith("/locate"):
                 result = get_location()
                 self.wfile.write(json.dumps(result).encode())
                 return

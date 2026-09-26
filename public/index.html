@@ -551,21 +551,29 @@
     fetchWeather(city);
   }
   function doLocate() {
-    setLoading(true, 'Detecting your location...');
+    if (isLoading) return;
     hideBanner();
+    setLoading(true, 'Detecting your location...');
     fetch('/api/weather?locate=1')
       .then(r => r.json())
       .then(loc => {
         const city = loc.city || 'London';
         document.getElementById('cityInput').value = city;
+        // Reset flag so fetchWeather can proceed
+        isLoading = false;
         fetchWeather(city);
       })
-      .catch(() => fetchWeather('London'));
+      .catch(() => {
+        isLoading = false;
+        fetchWeather('London');
+      });
   }
 
   // ── API Fetch ─────────────────────────────────────────────────────────────
   function fetchWeather(city) {
-    if (isLoading) return;
+    if (isLoading) return;   // Guard against duplicate calls
+    city = city.trim();
+    if (!city) { showBanner('Please enter a city name or ZIP code.', false); return; }
     hideBanner();
     setLoading(true, `Fetching weather for "${city}"...`);
 
