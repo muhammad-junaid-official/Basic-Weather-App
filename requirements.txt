@@ -1,0 +1,5 @@
+# Dependencies for SkyPulse Weather App
+# Developed by Muhammad Junaid
+
+requests>=2.31.0
+Pillow>=10.0.0
